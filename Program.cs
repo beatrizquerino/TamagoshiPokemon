@@ -38,33 +38,36 @@ class Program
                 var jsonResponse = JsonDocument.Parse(response.Content);
                 var results = jsonResponse.RootElement.GetProperty("results");
 
-                // Imprimir as espécies de Pokémon com números
-                Console.WriteLine("Lista de espécies de Pokémon:");
-                for (int i = 0; i < results.GetArrayLength(); i++)
+                while (mascote == null)
                 {
-                    Console.WriteLine($"{i + 1}. {results[i].GetProperty("name")}");
-                }
-
-                // Permitir que o usuário escolha um Pokémon
-                Console.WriteLine("\nDigite o número ou nome do Pokémon que você deseja escolher:");
-                string input = Console.ReadLine();
-                string chosenPokemon = GetPokemonNameByIndex(input, results);
-
-                if (chosenPokemon != null)
-                {
-                    // Buscar detalhes do Pokémon escolhido
-                    mascote = GetPokemonDetails(chosenPokemon);
-
-                    if (mascote != null)
+                    Console.WriteLine("Lista de espécies de Pokémon:");
+                    for (int i = 0; i < results.GetArrayLength(); i++)
                     {
-                        // Salvar o mascote adotado
-                        mascote.Salvar(caminhoArquivo);
-                        InteragirComMascote(mascote);
+                        Console.WriteLine($"{i + 1}. {results[i].GetProperty("name")}");
                     }
-                }
-                else
-                {
-                    Console.WriteLine("Escolha inválida.");
+
+                    Console.WriteLine("\nDigite o número ou nome do Pokémon que você deseja escolher:");
+                    string input = Console.ReadLine();
+                    string chosenPokemon = GetPokemonNameByIndex(input, results);
+
+                    if (chosenPokemon != null)
+                    {
+                        mascote = GetPokemonDetails(chosenPokemon);
+
+                        if (mascote != null)
+                        {
+                            mascote.Salvar(caminhoArquivo);
+                            InteragirComMascote(mascote);
+                        }
+                        else
+                        {
+                            Console.WriteLine("Erro ao acessar detalhes do Pokémon.");
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("Escolha inválida. Tente novamente.");
+                    }
                 }
             }
             else
